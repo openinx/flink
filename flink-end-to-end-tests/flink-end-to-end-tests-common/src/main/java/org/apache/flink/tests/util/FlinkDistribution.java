@@ -23,6 +23,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.GlobalConfiguration;
 import org.apache.flink.configuration.UnmodifiableConfiguration;
 import org.apache.flink.tests.util.flink.JobSubmission;
+import org.apache.flink.tests.util.flink.SQLJobSubmission;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.ExternalResource;
 
@@ -121,7 +122,7 @@ public final class FlinkDistribution implements ExternalResource {
 			LOG.error("Failure while shutting down Flink cluster.", e);
 		}
 
-		temporaryFolder.delete();
+		// temporaryFolder.delete();
 	}
 
 	@Override
@@ -248,6 +249,30 @@ public final class FlinkDistribution implements ExternalResource {
 				}
 			}
 		}
+	}
+
+	public void submitSQLJob(SQLJobSubmission job) throws IOException {
+		final List<String> commands = new ArrayList<>();
+		commands.add(bin.resolve("sql-client.sh").toAbsolutePath().toString());
+		if (job.isEmbedded()) {
+			commands.add("embedded");
+		}
+		if (job.getDefaultEnvFile() != null) {
+			commands.add("--defaults");
+			commands.add(job.getDefaultEnvFile());
+		}
+		if (job.getSessionEnvFile() != null) {
+			commands.add("--environment");
+			commands.add(job.getSessionEnvFile());
+		}
+		for (String jar : job.getJars()) {
+			commands.add("--jar");
+			commands.add(jar);
+		}
+		commands.add("--update");
+		commands.add("\"" + job.getSQL() + "\"");
+
+		AutoClosableProcess.create(commands.toArray(new String[0])).runBlocking();
 	}
 
 	public void copyOptJarsToLib(String jarNamePrefix) throws IOException {

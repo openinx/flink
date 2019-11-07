@@ -83,7 +83,8 @@ public class LocalStandaloneKafkaResource implements KafkaResource {
 	}
 
 	private static String getKafkaDownloadUrl(final String kafkaVersion) {
-		return String.format("https://archive.apache.org/dist/kafka/%s/kafka_2.11-%s.tgz", kafkaVersion, kafkaVersion);
+		return "https://mirrors.tuna.tsinghua.edu.cn/apache/kafka/2.1.1/kafka_2.11-2.1.1.tgz";
+//		return String.format("https://archive.apache.org/dist/kafka/%s/kafka_2.11-%s.tgz", kafkaVersion, kafkaVersion);
 	}
 
 	@Override
