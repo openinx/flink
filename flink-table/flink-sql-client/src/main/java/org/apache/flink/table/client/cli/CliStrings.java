@@ -220,6 +220,8 @@ public final class CliStrings {
 
     public static final String MESSAGE_CATALOG_REMOVED = "Catalog has been removed.";
 
+    public static final String MESSAGE_EXECUTE_FILE = "Executing SQL from file.";
+
     // --------------------------------------------------------------------------------------------
 
     public static final String RESULT_TITLE = "SQL Query Result";

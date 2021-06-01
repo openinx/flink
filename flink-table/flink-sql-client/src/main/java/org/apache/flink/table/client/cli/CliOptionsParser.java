@@ -72,6 +72,17 @@ public class CliOptionsParser {
                                     + "It might overwrite default environment properties.")
                     .build();
 
+    public static final Option OPTION_FILE =
+            Option.builder("f")
+                    .required(false)
+                    .longOpt("file")
+                    .numberOfArgs(1)
+                    .argName("script file")
+                    .desc(
+                            "Script file that should be executed. In this mode, "
+                                    + "the client will not open an interactive terminal.")
+                    .build();
+
     public static final Option OPTION_DEFAULTS =
             Option.builder("d")
                     .required(false)
@@ -147,6 +158,7 @@ public class CliOptionsParser {
         buildGeneralOptions(options);
         options.addOption(OPTION_SESSION);
         options.addOption(OPTION_ENVIRONMENT);
+        options.addOption(OPTION_FILE);
         options.addOption(OPTION_DEFAULTS);
         options.addOption(OPTION_JAR);
         options.addOption(OPTION_LIBRARY);
@@ -262,6 +274,7 @@ public class CliOptionsParser {
                     checkSessionId(line),
                     checkUrl(line, CliOptionsParser.OPTION_ENVIRONMENT),
                     checkUrl(line, CliOptionsParser.OPTION_DEFAULTS),
+                    checkUrl(line, CliOptionsParser.OPTION_FILE),
                     checkUrls(line, CliOptionsParser.OPTION_JAR),
                     checkUrls(line, CliOptionsParser.OPTION_LIBRARY),
                     line.getOptionValue(CliOptionsParser.OPTION_UPDATE.getOpt()),
@@ -281,6 +294,7 @@ public class CliOptionsParser {
                     checkSessionId(line),
                     checkUrl(line, CliOptionsParser.OPTION_ENVIRONMENT),
                     null,
+                    checkUrl(line, CliOptionsParser.OPTION_FILE),
                     checkUrls(line, CliOptionsParser.OPTION_JAR),
                     checkUrls(line, CliOptionsParser.OPTION_LIBRARY),
                     line.getOptionValue(CliOptionsParser.OPTION_UPDATE.getOpt()),
@@ -300,6 +314,7 @@ public class CliOptionsParser {
                     null,
                     null,
                     checkUrl(line, CliOptionsParser.OPTION_DEFAULTS),
+                    checkUrl(line, CliOptionsParser.OPTION_FILE),
                     checkUrls(line, CliOptionsParser.OPTION_JAR),
                     checkUrls(line, CliOptionsParser.OPTION_LIBRARY),
                     null,

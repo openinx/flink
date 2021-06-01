@@ -224,6 +224,27 @@ public class CliClient implements AutoCloseable {
         }
     }
 
+    public boolean executeFile(String content) {
+        terminal.writer().println(CliStrings.messageInfo(CliStrings.MESSAGE_EXECUTE_FILE).toAnsi());
+        for (String statement : CliStatementSplitter.splitContent(content)) {
+            terminal.writer()
+                    .println(
+                            new AttributedString(String.format("%s%s", prompt, statement))
+                                    .toString());
+            terminal.flush();
+
+            try {
+                Optional<SqlCommandCall> cmdCall = parseCommand(statement);
+                // Execute the statement.
+                cmdCall.ifPresent(this::callCommand);
+            } catch (SqlExecutionException e) {
+                printExecutionException(e);
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Submits a SQL update statement and prints status information and/or errors on the terminal.
      *
